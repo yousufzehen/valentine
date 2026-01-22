@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #FFB6C1 0%, #FFD4E5 50%, #FFC0CB 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1 {
+            color: #FF1493;
+            font-size: 2em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .heart-emoji {
+            font-size: 4em;
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: #D81B60;
+            margin: 20px 0;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .yes-btn {
+            background: linear-gradient(135deg, #FF69B4, #FF1493);
+            color: white;
+        }
+
+        .yes-btn:hover {
+            transform: scale(1.1) rotate(-2deg);
+            box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+        }
+
+        .no-btn {
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+            color: white;
+        }
+
+        .no-btn:hover {
+            transform: scale(0.95);
+        }
+
+        .sad-heart {
+            font-size: 5em;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .try-again-btn {
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+            color: white;
+            margin-top: 20px;
+        }
+
+        .gift-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .gift-box {
+            background: linear-gradient(135deg, #FFB6C1, #FF69B4);
+            padding: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .gift-box:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 8px 25px rgba(255, 20, 147, 0.4);
+        }
+
+        .gift-box h3 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .gift-icon {
+            font-size: 3em;
+        }
+
+        .gift-content {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 182, 193, 0.3);
+            border-radius: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .rose-bouquet {
+            font-size: 4em;
+            margin: 20px 0;
+        }
+
+        .love-note {
+            background: #FFFACD;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            line-height: 1.6;
+            color: #D81B60;
+            border: 2px dashed #FF69B4;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 2em;
+            animation: float 4s ease-in infinite;
+            opacity: 0;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #FFD4E5, #FFB6C1);
+            color: #D81B60;
+            margin-top: 20px;
+        }
+
+        .calendar-icon {
+            font-size: 3em;
+            margin: 10px 0;
+        }
+
+        .paper-plane {
+            font-size: 3em;
+            animation: fly 2s ease-in-out infinite;
+        }
+
+        @keyframes fly {
+            0%, 100% { transform: translate(0, 0) rotate(-45deg); }
+            50% { transform: translate(10px, -10px) rotate(-35deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floatingHearts"></div>
+    
+    <div class="container">
+        <!-- Screen 1: Initial Question -->
+        <div class="screen active" id="screen1">
+            <div class="calendar-icon">📅</div>
+            <div class="heart-emoji">💕</div>
+            <h1>Hey there,</h1>
+            <p class="question">Will you be my Valentine?</p>
+            <div class="paper-plane">✉️</div>
+            <div class="button-container">
+                <button class="yes-btn" onclick="showScreen(3)">YES OF COURSE</button>
+                <button class="no-btn" onclick="showScreen(2)">NO THANK YOU</button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Sad Response -->
+        <div class="screen" id="screen2">
+            <div class="sad-heart">💔</div>
+            <h1>Try again please :(</h1>
+            <p style="color: #D81B60; margin-top: 20px;">I promise I'll make it worth your while!</p>
+            <button class="try-again-btn" onclick="showScreen(1)">Try Again</button>
+        </div>
+
+        <!-- Screen 3: Gift Selection -->
+        <div class="screen" id="screen3">
+            <div class="heart-emoji">❤️</div>
+            <h1>Yay, you said yes!</h1>
+            <p style="color: #D81B60; margin: 20px 0;">I made all these for you babe</p>
+            <div class="gift-container">
+                <div class="gift-box" onclick="showGift(1)">
+                    <h3>Gift 1</h3>
+                    <div class="gift-icon">🌹</div>
+                </div>
+                <div class="gift-box" onclick="showGift(2)">
+                    <h3>Gift 2</h3>
+                    <div class="gift-icon">💌</div>
+                </div>
+            </div>
+            <div class="gift-content" id="giftContent"></div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenNum) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen' + screenNum).classList.add('active');
+            
+            if (screenNum === 3) {
+                createFloatingHearts();
+            }
+        }
+
+        function showGift(giftNum) {
+            const content = document.getElementById('giftContent');
+            
+            if (giftNum === 1) {
+                content.innerHTML = `
+                    <h2 style="color: #FF1493; margin-bottom: 20px;">Your Rose Bouquet</h2>
+                    <div class="rose-bouquet">💐</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; text-align: center;">
+                        <div style="background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 15px;">
+                            <p style="color: #D81B60; font-size: 0.9em; line-height: 1.5;">💕 I will always love you no matter what</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 15px;">
+                            <p style="color: #D81B60; font-size: 0.9em; line-height: 1.5;">💕 You will forever be my only option</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 15px;">
+                            <p style="color: #D81B60; font-size: 0.9em; line-height: 1.5;">💕 You are the best part of my life</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.6); padding: 15px; border-radius: 15px;">
+                            <p style="color: #D81B60; font-size: 0.9em; line-height: 1.5;">💕 I can't imagine a life without you in it</p>
+                        </div>
+                    </div>
+                    <button class="back-btn" onclick="document.getElementById('giftContent').innerHTML = ''">Close</button>
+                `;
+            } else {
+                content.innerHTML = `
+                    <h2 style="color: #FF1493; margin-bottom: 20px;">Words from my Heart</h2>
+                    <div style="font-size: 3em; margin: 20px 0;">XOXO</div>
+                    <div class="love-note">
+                        <p style="margin-bottom: 10px;"><strong>To the love of my life,</strong></p>
+                        <p>You make my life so meaningful and I am so lucky to have you as my valentine this year. I love you wholeheartedly and I can't wait to spend the rest of my life with you. You are literally the most beautiful girl I know. Anyway, I love you.</p>
+                        <p style="margin-top: 15px; text-align: right;"><strong>Always, Forever</strong> 💕</p>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div style="font-size: 3em;">🎵</div>
+                        <p style="color: #D81B60; margin-top: 10px;">A song for you</p>
+                        <p style="font-size: 0.9em; color: #FF69B4; margin-top: 10px;">(Imagine your favorite love song playing here! 🎶)</p>
+                    </div>
+                    <button class="back-btn" onclick="document.getElementById('giftContent').innerHTML = ''">Close</button>
+                `;
+            }
+            
+            content.scrollTop = 0;
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const hearts = ['❤️', '💕', '💖', '💗', '💝'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 8000);
+            }, 800);
+        }
+    </script>
+</body>
+</html>
